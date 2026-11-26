@@ -70,7 +70,9 @@ input,select{font:inherit;color:var(--ink);background:var(--card);border:1px sol
 .w.warn .track i{background:var(--warn)}.w.bad .track i{background:var(--bad)}
 .set{font-size:.9rem;color:var(--mute);display:flex;align-items:center;gap:6px}
 .set input{width:70px;padding:4px 8px}
+.att{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}.att figure{margin:0;display:grid;gap:4px;align-content:start}.att img{width:100%;height:120px;object-fit:cover;border-radius:6px;border:1px solid var(--line);cursor:pointer;background:var(--bg)}.att figcaption{font-size:.8rem;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ph{height:120px;display:grid;place-items:center;border:1px dashed var(--line);border-radius:6px;color:var(--mute);font-size:.85rem}.btn.sm{padding:3px 10px;font-size:.85rem}
 dialog{border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:min(520px,94vw);padding:20px}
+#viewer{width:min(900px,96vw)}
 dialog::backdrop{background:rgba(0,0,0,.5)}
 form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 label{font-size:.9rem;font-weight:500;display:block}
@@ -102,9 +104,12 @@ label input,label select{margin-top:4px;font-weight:400}
 <label>ระยะประกันข้อมูล (เดือน)<input type="number" name="dmonths" min="0" max="120" value="0"></label>
 <label class="full">รายละเอียดประกันข้อมูล (ถ้ามี)<input name="dnote" placeholder="เช่น Seagate Rescue Data Recovery"></label>
 <label class="full">ร้านค้า / หมายเหตุ<input name="note"></label>
+<label class="full">ใบกำกับภาษี / หลักฐานการซื้อ (รูปภาพ เลือกได้หลายไฟล์)<input type="file" id="ffile" accept="image/*" multiple></label>
+<div class="full att" id="fatt"></div>
 <div class="row"><button type="button" class="btn" id="cancel">ยกเลิก</button><button class="btn p">บันทึก</button></div>
 </form>
 </dialog>
+<dialog id="viewer"><div class="bar" style="justify-content:space-between"><b id="vname"></b><span><a class="btn" id="vdl">ดาวน์โหลด</a> <button class="btn" id="vclose">ปิด</button></span></div><img id="vimg" alt="" style="width:100%;height:auto;border-radius:4px"></dialog>
 <input type="file" id="file" accept=".json" hidden>
 
 <script>
@@ -154,6 +159,34 @@ function leftText(i){
 const bd=w=>w?`<span class="badge ${w.st}">${w.label}</span>`:`<span class="badge none">ไม่มี</span>`;
 const KN={h:"ประกันฮาร์ดแวร์",d:"ประกันข้อมูล"},SN={ok:"อยู่ในประกัน",warn:"ใกล้หมดประกัน",bad:"หมดประกันแล้ว"};
 
+/* ---------- Attachments ---------- */
+let fl=[],dbp;
+function db(){return dbp||(dbp=new Promise((res,rej)=>{try{const r=indexedDB.open("hdd-files",1);r.onupgradeneeded=()=>r.result.createObjectStore("f");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}))}
+async function idb(mode,fn){const d=await db();return new Promise((res,rej)=>{const t=d.transaction("f",mode),r=fn(t.objectStore("f"));t.oncomplete=()=>res(r&&r.result);t.onerror=()=>rej(t.error)})}
+const putF=(id,v)=>idb("readwrite",s=>s.put(v,id)),getF=id=>idb("readonly",s=>s.get(id)),delF=id=>idb("readwrite",s=>s.delete(id));
+function shrink(file){return new Promise((res,rej)=>{const img=new Image(),u=URL.createObjectURL(file);img.onload=()=>{const sc=Math.min(1,1800/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.8))};img.onerror=()=>{URL.revokeObjectURL(u);rej()};img.src=u})}
+function showImg(src,name){$("#vimg").src=src;$("#vimg").alt=name;$("#vname").textContent=name;const a=$("#vdl");a.href=src;a.download=name.replace(/\.[^.]*$/,"")+".jpg";$("#viewer").showModal()}
+$("#vclose").onclick=()=>$("#viewer").close();
+function renderFatt(){
+  const b=$("#fatt");
+  b.innerHTML=fl.map((f,n)=>`<figure>${f.data?`<img src="${f.data}" alt="${esc(f.name)}">`:`<div class="ph">กำลังโหลด…</div>`}<figcaption>${esc(f.name)}</figcaption><button type="button" class="btn sm d" data-rm="${n}">ลบไฟล์</button></figure>`).join("");
+  b.querySelectorAll("[data-rm]").forEach(x=>x.onclick=()=>{fl.splice(Number(x.dataset.rm),1);renderFatt()});
+}
+$("#ffile").onchange=async e=>{
+  for(const file of e.target.files){try{fl.push({id:"f"+Date.now()+Math.random().toString(36).slice(2,6),name:file.name,data:await shrink(file),n:true})}catch(x){alert("อ่านไฟล์ "+file.name+" ไม่ได้ (รองรับเฉพาะไฟล์รูปภาพ)")}}
+  e.target.value="";renderFatt()
+};
+async function loadAtt(it){
+  const box=$("#datt");if(!box||!(it.files||[]).length)return;
+  box.innerHTML=it.files.map((f,n)=>`<figure><div class="ph" data-n="${n}">กำลังโหลด…</div><figcaption>${esc(f.name)}</figcaption></figure>`).join("");
+  for(const[n,f]of it.files.entries()){
+    let d=null;try{d=await getF(f.id)}catch(e){}
+    const ph=box.querySelector(`[data-n="${n}"]`);if(!ph)return;
+    if(d){ph.outerHTML=`<img src="${d}" alt="${esc(f.name)}" tabindex="0" data-n="${n}">`;const im=box.querySelector(`img[data-n="${n}"]`);im.onclick=()=>showImg(d,f.name);im.onkeydown=e=>{if(e.key==="Enter")showImg(d,f.name)}}
+    else ph.textContent="ไม่พบไฟล์"
+  }
+}
+
 /* ---------- Dashboard ---------- */
 function tile(k,st,n,label){return`<button class="t ${st||""}" data-go="list" data-k="${k}" data-st="${st||""}"><b>${n}</b><span>${label}</span></button>`}
 function dash(){
@@ -190,7 +223,7 @@ function match({i},f){
 function res(){
   const s=q.trim().toLowerCase();
   const rows=all().filter(x=>match(x,flt)&&(!s||[x.it.model,x.it.sn,x.it.note,x.it.type,x.it.dnote].join(" ").toLowerCase().includes(s))).sort((a,b)=>a.i.left-b.i.left);
-  return rows.length?rows.map(({it,i})=>`<article class="item ${i.st}" data-item="${it.id}"><div><h3><a href="#item-${it.id}">${esc(it.model)}</a></h3><div class="meta">${esc(it.type)}${it.size?" · "+esc(it.size):""}${it.sn?" · S/N "+esc(it.sn):""}</div><div class="meta">ซื้อ ${fmt(parse(it.buy))}${it.note?" · "+esc(it.note):""}</div></div>
+  return rows.length?rows.map(({it,i})=>`<article class="item ${i.st}" data-item="${it.id}"><div><h3><a href="#item-${it.id}">${esc(it.model)}</a></h3><div class="meta">${esc(it.type)}${it.size?" · "+esc(it.size):""}${it.sn?" · S/N "+esc(it.sn):""}</div><div class="meta">ซื้อ ${fmt(parse(it.buy))}${it.note?" · "+esc(it.note):""}${(it.files||[]).length?" · แนบหลักฐาน "+it.files.length+" ไฟล์":""}</div></div>
   <div class="mini"><span>ฮาร์ดแวร์ ${bd(i.h)} ${i.h?"หมด "+fmt(i.h.e):""}</span><span>ข้อมูล ${bd(i.d)} ${i.d?"หมด "+fmt(i.d.e):""}</span></div></article>`).join(""):`<div class="empty">ไม่พบรายการ</div>`
 }
 function listView(){
@@ -220,14 +253,15 @@ function detail(it){
   <h2>${esc(it.model)}</h2>
   <div class="info"><dl class="kv"><dt>ประเภท</dt><dd>${esc(it.type)}</dd><dt>ความจุ</dt><dd>${esc(it.size)||"-"}</dd><dt>ซีเรียล (S/N)</dt><dd>${esc(it.sn)||"-"}</dd><dt>วันที่ซื้อ</dt><dd>${fmt(parse(it.buy))}</dd><dt>ร้านค้า / หมายเหตุ</dt><dd>${esc(it.note)||"-"}</dd></dl></div>
   <div class="ws">${wfull("ประกันฮาร์ดแวร์ (ตัวเครื่อง)",i.h)}${wfull("ประกันข้อมูล",i.d,it.dnote)}</div>
-  <div class="bar"><button class="btn p" data-e="${it.id}">แก้ไข</button><button class="btn d" data-d="${it.id}">ลบรายการนี้</button></div>`
+  <div class="sec">ใบกำกับภาษี / หลักฐานการซื้อ<small>${(it.files||[]).length} ไฟล์ · กดที่รูปเพื่อดูขนาดเต็ม</small></div><div class="att" id="datt">${(it.files||[]).length?"":'<div class="meta">ยังไม่มีไฟล์ กด “แก้ไข” เพื่อแนบรูป</div>'}</div>
+  <div class="bar" style="margin-top:16px"><button class="btn p" data-e="${it.id}">แก้ไข</button><button class="btn d" data-d="${it.id}">ลบรายการนี้</button></div>`
 }
 
 /* ---------- Router ---------- */
 function render(){
   const h=location.hash.slice(1),app=$("#app");
   document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.n===(h.startsWith("item-")?"list":h||"dashboard")));
-  if(h.startsWith("item-")){const it=items.find(x=>x.id==h.slice(5));app.innerHTML=it?detail(it):`<a class="back" href="#list">‹ รายการทั้งหมด</a><div class="empty">ไม่พบรายการนี้</div>`}
+  if(h.startsWith("item-")){const it=items.find(x=>x.id==h.slice(5));app.innerHTML=it?detail(it):`<a class="back" href="#list">‹ รายการทั้งหมด</a><div class="empty">ไม่พบรายการนี้</div>`;if(it)loadAtt(it)}
   else if(h==="list"){app.innerHTML=listView();$("#q").oninput=e=>{q=e.target.value;$("#res").innerHTML=res()}}
   else{app.innerHTML=dash();bindTools()}
 }
@@ -236,14 +270,15 @@ window.addEventListener("hashchange",()=>{render();scrollTo(0,0)});
 
 function bindTools(){
   $("#days").onchange=e=>{alertDays=Math.max(1,Number(e.target.value)||60);save();render()};
-  $("#exp").onclick=()=>{
-    const u=URL.createObjectURL(new Blob([JSON.stringify({items,alertDays},null,2)],{type:"application/json"}));
+  $("#exp").onclick=async()=>{
+    const files={};for(const it of items)for(const f of it.files||[]){try{files[f.id]=await getF(f.id)}catch(e){}}
+    const u=URL.createObjectURL(new Blob([JSON.stringify({items,alertDays,files})],{type:"application/json"}));
     const a=document.createElement("a");a.href=u;a.download="hdd-warranty-backup.json";a.click();URL.revokeObjectURL(u)
   };
   $("#imp").onclick=()=>$("#file").click();
 }
 $("#file").onchange=e=>{
-  const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(Array.isArray(d.items)){items=d.items;alertDays=d.alertDays||60;save();render()}else alert("ไฟล์ไม่ถูกต้อง")}catch(x){alert("อ่านไฟล์ไม่ได้")}};
+  const r=new FileReader();r.onload=async()=>{try{const d=JSON.parse(r.result);if(Array.isArray(d.items)){items=d.items;alertDays=d.alertDays||60;for(const[k,v]of Object.entries(d.files||{})){try{await putF(k,v)}catch(e){}}save();render()}else alert("ไฟล์ไม่ถูกต้อง")}catch(x){alert("อ่านไฟล์ไม่ได้")}};
   if(e.target.files[0])r.readAsText(e.target.files[0]);e.target.value=""
 };
 
@@ -252,12 +287,17 @@ function openForm(it){
   editId=it?it.id:null;const f=$("#f");f.reset();
   if(it)for(const k of["model","type","size","sn","buy","hstart","months","dstart","dmonths","dnote","note"])f.elements[k].value=it[k]??"";
   else f.elements.buy.value=iso(new Date());
+  fl=((it&&it.files)||[]).map(x=>({...x,data:null}));renderFatt();
+  fl.forEach(async x=>{try{x.data=await getF(x.id)}catch(e){}renderFatt()});
   $("#dlg").showModal();
 }
 $("#add").onclick=()=>openForm();
 $("#cancel").onclick=()=>$("#dlg").close();
-$("#f").onsubmit=e=>{
+$("#f").onsubmit=async e=>{
   e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
+  const old=editId?((items.find(x=>x.id===editId)||{}).files||[]):[];
+  try{for(const f of fl)if(f.n)await putF(f.id,f.data);for(const o of old)if(!fl.some(f=>f.id===o.id))await delF(o.id)}catch(x){alert("บันทึกรูปไม่สำเร็จ เบราว์เซอร์อาจไม่อนุญาตให้เก็บไฟล์")}
+  d.files=fl.map(({id,name})=>({id,name}));
   if(editId){items=items.map(x=>x.id===editId?{...x,...d}:x)}else items.push({id:Date.now(),...d});
   save();$("#dlg").close();render();
 };
@@ -266,7 +306,7 @@ document.addEventListener("click",e=>{
   if(e.target.closest("a")&&!t.dataset.go)return;
   if(t.dataset.go){e.preventDefault();flt={k:t.dataset.k||"",st:t.dataset.st||"",month:t.dataset.month||""};q="";go("list");scrollTo(0,0)}
   else if(t.dataset.e)openForm(items.find(x=>x.id==t.dataset.e));
-  else if(t.dataset.d){if(confirm("ลบรายการนี้?")){items=items.filter(x=>x.id!=t.dataset.d);save();go("list")}}
+  else if(t.dataset.d){if(confirm("ลบรายการนี้?")){const di=items.find(x=>x.id==t.dataset.d);((di&&di.files)||[]).forEach(f=>delF(f.id).catch(()=>{}));items=items.filter(x=>x.id!=t.dataset.d);save();go("list")}}
   else if(t.dataset.item)location.hash="item-"+t.dataset.item;
 });
 load();render();
