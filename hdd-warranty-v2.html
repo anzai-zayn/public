@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ทะเบียนฮาร์ดดิสก์และประกัน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9ece8;--card:#fbfcfa;--ink:#1c2326;--mute:#5d686b;--line:#c9d0cc;--ok:#1f7a4d;--okbg:#dcefe4;--warn:#a85a00;--warnbg:#fde9c8;--bad:#b3261e;--badbg:#f9dad7;--acc:#16505c;--accfg:#fff;--dat:#7a4fa3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13191b;--card:#1b2427;--ink:#e6ecea;--mute:#98a6a8;--line:#2f3c40;--ok:#6fd3a0;--okbg:#17372a;--warn:#f2b45c;--warnbg:#3d2d10;--bad:#ff9a92;--badbg:#431d1a;--acc:#7cc7d6;--accfg:#0d1a1d;--dat:#c3a0ee}}
+:root[data-theme="dark"]{--bg:#13191b;--card:#1b2427;--ink:#e6ecea;--mute:#98a6a8;--line:#2f3c40;--ok:#6fd3a0;--okbg:#17372a;--warn:#f2b45c;--warnbg:#3d2d10;--bad:#ff9a92;--badbg:#431d1a;--acc:#7cc7d6;--accfg:#0d1a1d;--dat:#c3a0ee}
+html{color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "IBM Plex Sans Thai",system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.5rem;margin:0;font-weight:700}
+h2{font-size:1.5rem;margin:6px 0 4px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav a{padding:6px 14px;border-radius:99px;color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--card);font-weight:500}
+nav a.on{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+.sec{margin:24px 0 8px;font-size:1.05rem;font-weight:700}
+.sec small{font-weight:400;color:var(--mute);margin-left:6px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.t{all:unset;box-sizing:border-box;cursor:pointer;display:block;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.t:hover{border-color:var(--acc)}
+.t b{display:block;font-size:1.9rem;line-height:1.1}
+.t span{color:var(--mute);font-size:.88rem}
+.t.ok b{color:var(--ok)}.t.warn b{color:var(--warn)}.t.bad b{color:var(--bad)}
+.total{margin-bottom:10px}
+.item{background:var(--card);border:1px solid var(--line);border-left-width:6px;border-radius:6px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:6px 14px;cursor:pointer;margin-bottom:10px}
+.item:hover{border-color:var(--acc)}
+.item.ok{border-left-color:var(--ok)}.item.warn{border-left-color:var(--warn)}.item.bad{border-left-color:var(--bad)}
+.item h3{margin:0;font-size:1.05rem}
+.item h3 a{color:inherit;text-decoration:none}
+.meta{color:var(--mute);font-size:.9rem}
+.mini{font-size:.9rem;text-align:right;display:grid;gap:2px}
+.badge{display:inline-block;font-weight:700;font-size:.8rem;padding:2px 10px;border-radius:99px;white-space:nowrap}
+.badge.ok{background:var(--okbg);color:var(--ok)}.badge.warn{background:var(--warnbg);color:var(--warn)}.badge.bad{background:var(--badbg);color:var(--bad)}.badge.none{background:var(--line);color:var(--mute)}
+.tl{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 8px}
+.tl button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;border-radius:4px;font-size:.8rem;color:var(--mute)}
+.tl button:hover{background:var(--bg)}
+.col{height:90px;width:60%;display:flex;flex-direction:column;justify-content:flex-end;gap:1px}
+.col i{display:block;width:100%;border-radius:2px}
+.col .h{background:var(--acc)}.col .d{background:var(--dat)}
+.lg{font-size:.85rem;color:var(--mute);margin-top:6px}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px;vertical-align:-1px}
+.empty{text-align:center;color:var(--mute);padding:28px 10px;border:1px dashed var(--line);border-radius:6px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+input,select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+.bar input[type=search]{flex:1;min-width:160px;width:auto}
+.btn{font:inherit;font-weight:500;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:8px 14px;text-decoration:none;display:inline-block}
+.btn.p{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+.btn.d{color:var(--bad)}
+.btn.on{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
+.back{display:inline-block;margin-bottom:8px;color:var(--acc);font-weight:500}
+.ws{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.w{background:var(--card);border:1px solid var(--line);border-top-width:5px;border-radius:6px;padding:12px 14px}
+.w.ok{border-top-color:var(--ok)}.w.warn{border-top-color:var(--warn)}.w.bad{border-top-color:var(--bad)}
+.w h4{margin:0 0 6px;display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:1rem}
+.big{font-size:1.4rem;font-weight:700}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0 0}
+.kv dt{color:var(--mute)}.kv dd{margin:0}
+.info{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.track{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:12px}
+.track i{display:block;height:100%;background:var(--ok)}
+.w.warn .track i{background:var(--warn)}.w.bad .track i{background:var(--bad)}
+.set{font-size:.9rem;color:var(--mute);display:flex;align-items:center;gap:6px}
+.set input{width:70px;padding:4px 8px}
+dialog{border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:min(520px,94vw);padding:20px}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-size:.9rem;font-weight:500;display:block}
+label input,label select{margin-top:4px;font-weight:400}
+.full{grid-column:1/-1}
+.row{display:flex;gap:8px;justify-content:flex-end;grid-column:1/-1}
+@media(max-width:620px){.grid,.ws{grid-template-columns:1fr}.grid{grid-template-columns:repeat(3,1fr)}.t b{font-size:1.5rem}.ws{grid-template-columns:1fr}.item{grid-template-columns:1fr}.mini{text-align:left}form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<div class="top">
+<h1>ทะเบียนฮาร์ดดิสก์และประกัน</h1>
+<nav><a href="#dashboard" data-n="dashboard">แดชบอร์ด</a><a href="#list" data-n="list">รายการทั้งหมด</a><button class="btn p" id="add">+ เพิ่มฮาร์ดดิสก์</button></nav>
+</div>
+<div id="app"></div>
+</main>
+
+<dialog id="dlg">
+<form id="f">
+<label class="full">ยี่ห้อ / รุ่น<input name="model" required placeholder="เช่น WD Blue 2TB"></label>
+<label>ประเภท<select name="type"><option>HDD</option><option>SSD</option><option>External HDD</option><option>NVMe</option></select></label>
+<label>ความจุ<input name="size" placeholder="เช่น 2TB"></label>
+<label class="full">หมายเลขซีเรียล (S/N)<input name="sn"></label>
+<label class="full">วันที่ซื้อ<input type="date" name="buy" required></label>
+<label>วันเริ่มประกันฮาร์ดแวร์ (ว่าง = วันที่ซื้อ)<input type="date" name="hstart"></label>
+<label>ระยะประกันฮาร์ดแวร์ (เดือน)<input type="number" name="months" min="0" max="120" value="36"></label>
+<label>วันเริ่มประกันข้อมูล (ว่าง = วันที่ซื้อ)<input type="date" name="dstart"></label>
+<label>ระยะประกันข้อมูล (เดือน)<input type="number" name="dmonths" min="0" max="120" value="0"></label>
+<label class="full">รายละเอียดประกันข้อมูล (ถ้ามี)<input name="dnote" placeholder="เช่น Seagate Rescue Data Recovery"></label>
+<label class="full">ร้านค้า / หมายเหตุ<input name="note"></label>
+<div class="row"><button type="button" class="btn" id="cancel">ยกเลิก</button><button class="btn p">บันทึก</button></div>
+</form>
+</dialog>
+<input type="file" id="file" accept=".json" hidden>
+
+<script>
+const KEY="hdd-warranty-v1";
+let items=[],alertDays=60,flt={},editId=null,q="";
+const $=s=>document.querySelector(s);
+const today=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())};
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+function load(){
+  try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&Array.isArray(r.items)){items=r.items;alertDays=r.alertDays||60;return}}catch(e){}
+  const ago=m=>{const x=today();x.setMonth(x.getMonth()-m);return iso(x)};
+  items=[
+    {id:1,model:"WD Blue 2TB",type:"HDD",size:"2TB",sn:"WX12A3456789",buy:ago(35),months:36,note:"ตัวอย่าง: ฮาร์ดแวร์ใกล้หมด"},
+    {id:2,model:"Seagate Barracuda 1TB",type:"HDD",size:"1TB",sn:"ZN9Q8W7E",buy:ago(40),months:36,dmonths:48,dnote:"Rescue Data Recovery",note:"ตัวอย่าง: ฮาร์ดแวร์หมดแล้ว แต่ประกันข้อมูลยังอยู่"},
+    {id:3,model:"Samsung 980 NVMe 500GB",type:"NVMe",size:"500GB",sn:"S64DNX0R",buy:ago(8),months:60,dstart:ago(6),dmonths:36,dnote:"กู้ข้อมูล 3 ปี",note:"ตัวอย่าง: ประกันข้อมูลเริ่มทีหลัง"}
+  ];save()
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({items,alertDays}))}catch(e){}}
+function parse(s){const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)}
+function expiry(it,m,s){const d=parse(s||it.buy);const day=d.getDate();d.setMonth(d.getMonth()+Number(m));if(d.getDate()!==day)d.setDate(0);return d}
+function calc(it,m,s){
+  m=Number(m);if(!(m>0))return null;
+  const e=expiry(it,m,s),left=Math.round((e-today())/864e5);
+  const total=Math.max(1,Math.round((e-parse(s||it.buy))/864e5));
+  let st="ok",label="อยู่ในประกัน";
+  if(left<0){st="bad";label="หมดประกันแล้ว"}
+  else if(left<=alertDays){st="warn";label="ใกล้หมดประกัน"}
+  return{e,left,st,label,m,s:s||it.buy,pct:Math.min(100,Math.max(0,Math.round(left/total*100)))}
+}
+const RANK={ok:0,warn:1,bad:2};
+function info(it){
+  const h=calc(it,it.months,it.hstart),d=calc(it,it.dmonths,it.dstart),l=[h,d].filter(Boolean);
+  if(!l.length)return{h,d,st:"ok",left:99999};
+  return{h,d,st:l.reduce((a,x)=>RANK[x.st]>RANK[a]?x.st:a,"ok"),left:Math.min(...l.map(x=>x.left))}
+}
+const all=()=>items.map(it=>({it,i:info(it)}));
+const fmt=d=>d.toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
+const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const mkey=d=>d.getFullYear()+"-"+(d.getMonth()+1);
+function leftText(i){
+  if(i.left<0)return`หมดมาแล้ว ${-i.left} วัน`;
+  if(i.left===0)return"หมดประกันวันนี้";
+  if(i.left>=365)return`เหลือ ${Math.floor(i.left/365)} ปี ${Math.round(i.left%365/30)} เดือน`;
+  if(i.left>=60)return`เหลือ ${Math.round(i.left/30)} เดือน (${i.left} วัน)`;
+  return`เหลืออีก ${i.left} วัน`
+}
+const bd=w=>w?`<span class="badge ${w.st}">${w.label}</span>`:`<span class="badge none">ไม่มี</span>`;
+const KN={h:"ประกันฮาร์ดแวร์",d:"ประกันข้อมูล"},SN={ok:"อยู่ในประกัน",warn:"ใกล้หมดประกัน",bad:"หมดประกันแล้ว"};
+
+/* ---------- Dashboard ---------- */
+function tile(k,st,n,label){return`<button class="t ${st||""}" data-go="list" data-k="${k}" data-st="${st||""}"><b>${n}</b><span>${label}</span></button>`}
+function dash(){
+  const A=all(),cnt=(k,st)=>A.filter(x=>x.i[k]&&x.i[k].st===st).length;
+  const ev=[];A.forEach(({it,i})=>["h","d"].forEach(k=>{if(i[k]&&i[k].st!=="ok")ev.push({it,k,w:i[k]})}));
+  ev.sort((a,b)=>(a.w.st===b.w.st)?(a.w.st==="warn"?a.w.left-b.w.left:b.w.left-a.w.left):(a.w.st==="warn"?-1:1));
+  const att=ev.slice(0,6).map(({it,k,w})=>`<div class="item ${w.st}" data-item="${it.id}"><div><h3><a href="#item-${it.id}">${esc(it.model)}</a></h3><div class="meta">${KN[k]} · หมดประกัน ${fmt(w.e)}</div></div><div class="mini">${bd(w)}<span>${leftText(w)}</span></div></div>`).join("")||`<div class="empty">ไม่มีประกันที่ใกล้หมดหรือหมดแล้ว</div>`;
+  const b=today(),ms=[...Array(12)].map((_,n)=>{const d=new Date(b.getFullYear(),b.getMonth()+n,1);return{key:mkey(d),lab:d.toLocaleDateString("th-TH",{month:"short"}),h:0,d:0}});
+  A.forEach(({i})=>["h","d"].forEach(k=>{const w=i[k];if(!w||w.left<0)return;const m=ms.find(x=>x.key===mkey(w.e));if(m)m[k]++}));
+  const mx=Math.max(1,...ms.map(m=>Math.max(1,m.h+m.d)));
+  const tl=ms.map(m=>`<button data-go="list" data-k="" data-st="" data-month="${m.key}" aria-label="${m.lab}: ฮาร์ดแวร์ ${m.h} ข้อมูล ${m.d}"><span>${m.h+m.d||""}</span><div class="col"><i class="d" style="height:${m.d/mx*80}px"></i><i class="h" style="height:${m.h/mx*80}px"></i></div>${m.lab}</button>`).join("");
+  return`
+  <button class="t total" style="width:100%" data-go="list" data-k="" data-st=""><b>${items.length}</b><span>ฮาร์ดดิสก์ทั้งหมด · ดูรายการ</span></button>
+  <div class="sec">ประกันฮาร์ดแวร์</div>
+  <div class="grid">${tile("h","ok",cnt("h","ok"),"อยู่ในประกัน")}${tile("h","warn",cnt("h","warn"),"ใกล้หมด")}${tile("h","bad",cnt("h","bad"),"หมดแล้ว")}</div>
+  <div class="sec">ประกันข้อมูล</div>
+  <div class="grid">${tile("d","ok",cnt("d","ok"),"อยู่ในประกัน")}${tile("d","warn",cnt("d","warn"),"ใกล้หมด")}${tile("d","bad",cnt("d","bad"),"หมดแล้ว")}</div>
+  <div class="sec">ควรดูแลก่อน<small>กดเพื่อดูรายละเอียด</small></div>${att}
+  <div class="sec">ประกันที่จะหมดใน 12 เดือนข้างหน้า<small>กดที่เดือนเพื่อดูรายการ</small></div>
+  <div class="tl">${tl}</div>
+  <div class="lg"><i style="background:var(--acc)"></i>ฮาร์ดแวร์<i style="background:var(--dat)"></i>ข้อมูล</div>
+  <div class="sec">ตั้งค่าและข้อมูล</div>
+  <div class="bar"><label class="set">แจ้งเตือนล่วงหน้า <input type="number" id="days" min="1" max="365" value="${alertDays}"> วัน</label>
+  <button class="btn" id="exp">สำรองข้อมูล</button><button class="btn" id="imp">นำเข้า</button></div>`
+}
+
+/* ---------- List ---------- */
+function match({i},f){
+  const ws=(f.k?[i[f.k]]:[i.h,i.d]).filter(Boolean);
+  if(f.st&&!ws.some(w=>w.st===f.st))return false;
+  if(f.month&&!ws.some(w=>w.left>=0&&mkey(w.e)===f.month))return false;
+  return true
+}
+function res(){
+  const s=q.trim().toLowerCase();
+  const rows=all().filter(x=>match(x,flt)&&(!s||[x.it.model,x.it.sn,x.it.note,x.it.type,x.it.dnote].join(" ").toLowerCase().includes(s))).sort((a,b)=>a.i.left-b.i.left);
+  return rows.length?rows.map(({it,i})=>`<article class="item ${i.st}" data-item="${it.id}"><div><h3><a href="#item-${it.id}">${esc(it.model)}</a></h3><div class="meta">${esc(it.type)}${it.size?" · "+esc(it.size):""}${it.sn?" · S/N "+esc(it.sn):""}</div><div class="meta">ซื้อ ${fmt(parse(it.buy))}${it.note?" · "+esc(it.note):""}</div></div>
+  <div class="mini"><span>ฮาร์ดแวร์ ${bd(i.h)} ${i.h?"หมด "+fmt(i.h.e):""}</span><span>ข้อมูล ${bd(i.d)} ${i.d?"หมด "+fmt(i.d.e):""}</span></div></article>`).join(""):`<div class="empty">ไม่พบรายการ</div>`
+}
+function listView(){
+  const on=s=>flt.st===s&&!flt.month?"on":"";
+  const parts=[];if(flt.k)parts.push(KN[flt.k]);if(flt.st)parts.push(SN[flt.st]);
+  if(flt.month){const[y,m]=flt.month.split("-");parts.push("หมดใน "+new Date(y,m-1,1).toLocaleDateString("th-TH",{month:"long",year:"numeric"}))}
+  return`<h2>รายการทั้งหมด</h2>
+  <div class="bar"><input type="search" id="q" value="${esc(q)}" placeholder="ค้นหารุ่น ซีเรียล หรือร้านค้า" aria-label="ค้นหา"></div>
+  <div class="bar"><button class="btn ${!flt.st&&!flt.month?"on":""}" data-go="list" data-k="${flt.k||""}" data-st="">ทั้งหมด</button>
+  <button class="btn ${on("warn")}" data-go="list" data-k="${flt.k||""}" data-st="warn">ใกล้หมด</button>
+  <button class="btn ${on("bad")}" data-go="list" data-k="${flt.k||""}" data-st="bad">หมดแล้ว</button>
+  <button class="btn ${on("ok")}" data-go="list" data-k="${flt.k||""}" data-st="ok">อยู่ในประกัน</button></div>
+  ${parts.length?`<p class="meta">กำลังกรอง: ${parts.join(" · ")} · <a href="#list" data-go="list" data-k="" data-st="">ล้างตัวกรอง</a></p>`:""}
+  <div id="res">${res()}</div>`
+}
+
+/* ---------- Detail ---------- */
+function wfull(t,w,n){
+  if(!w)return`<div class="w"><h4>${t}${bd(null)}</h4><div class="meta">ไม่ได้ระบุประกันส่วนนี้ กด “แก้ไข” เพื่อเพิ่ม</div></div>`;
+  return`<div class="w ${w.st}"><h4>${t}${bd(w)}</h4><div class="big">${fmt(w.e)}</div><div class="meta">${leftText(w)}</div>
+  <dl class="kv"><dt>เริ่มประกัน</dt><dd>${fmt(parse(w.s))}</dd><dt>ระยะประกัน</dt><dd>${w.m} เดือน</dd><dt>หมดประกัน</dt><dd>${fmt(w.e)}</dd>${n?`<dt>รายละเอียด</dt><dd>${esc(n)}</dd>`:""}</dl>
+  <div class="track" aria-hidden="true"><i style="width:${w.pct}%"></i></div></div>`
+}
+function detail(it){
+  const i=info(it);
+  return`<a class="back" href="#list">‹ รายการทั้งหมด</a>
+  <h2>${esc(it.model)}</h2>
+  <div class="info"><dl class="kv"><dt>ประเภท</dt><dd>${esc(it.type)}</dd><dt>ความจุ</dt><dd>${esc(it.size)||"-"}</dd><dt>ซีเรียล (S/N)</dt><dd>${esc(it.sn)||"-"}</dd><dt>วันที่ซื้อ</dt><dd>${fmt(parse(it.buy))}</dd><dt>ร้านค้า / หมายเหตุ</dt><dd>${esc(it.note)||"-"}</dd></dl></div>
+  <div class="ws">${wfull("ประกันฮาร์ดแวร์ (ตัวเครื่อง)",i.h)}${wfull("ประกันข้อมูล",i.d,it.dnote)}</div>
+  <div class="bar"><button class="btn p" data-e="${it.id}">แก้ไข</button><button class="btn d" data-d="${it.id}">ลบรายการนี้</button></div>`
+}
+
+/* ---------- Router ---------- */
+function render(){
+  const h=location.hash.slice(1),app=$("#app");
+  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.n===(h.startsWith("item-")?"list":h||"dashboard")));
+  if(h.startsWith("item-")){const it=items.find(x=>x.id==h.slice(5));app.innerHTML=it?detail(it):`<a class="back" href="#list">‹ รายการทั้งหมด</a><div class="empty">ไม่พบรายการนี้</div>`}
+  else if(h==="list"){app.innerHTML=listView();$("#q").oninput=e=>{q=e.target.value;$("#res").innerHTML=res()}}
+  else{app.innerHTML=dash();bindTools()}
+}
+function go(h){if(location.hash.slice(1)===h)render();else location.hash=h}
+window.addEventListener("hashchange",()=>{render();scrollTo(0,0)});
+
+function bindTools(){
+  $("#days").onchange=e=>{alertDays=Math.max(1,Number(e.target.value)||60);save();render()};
+  $("#exp").onclick=()=>{
+    const u=URL.createObjectURL(new Blob([JSON.stringify({items,alertDays},null,2)],{type:"application/json"}));
+    const a=document.createElement("a");a.href=u;a.download="hdd-warranty-backup.json";a.click();URL.revokeObjectURL(u)
+  };
+  $("#imp").onclick=()=>$("#file").click();
+}
+$("#file").onchange=e=>{
+  const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(Array.isArray(d.items)){items=d.items;alertDays=d.alertDays||60;save();render()}else alert("ไฟล์ไม่ถูกต้อง")}catch(x){alert("อ่านไฟล์ไม่ได้")}};
+  if(e.target.files[0])r.readAsText(e.target.files[0]);e.target.value=""
+};
+
+/* ---------- Form & clicks ---------- */
+function openForm(it){
+  editId=it?it.id:null;const f=$("#f");f.reset();
+  if(it)for(const k of["model","type","size","sn","buy","hstart","months","dstart","dmonths","dnote","note"])f.elements[k].value=it[k]??"";
+  else f.elements.buy.value=iso(new Date());
+  $("#dlg").showModal();
+}
+$("#add").onclick=()=>openForm();
+$("#cancel").onclick=()=>$("#dlg").close();
+$("#f").onsubmit=e=>{
+  e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
+  if(editId){items=items.map(x=>x.id===editId?{...x,...d}:x)}else items.push({id:Date.now(),...d});
+  save();$("#dlg").close();render();
+};
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-go],[data-item],[data-e],[data-d]");if(!t)return;
+  if(e.target.closest("a")&&!t.dataset.go)return;
+  if(t.dataset.go){e.preventDefault();flt={k:t.dataset.k||"",st:t.dataset.st||"",month:t.dataset.month||""};q="";go("list");scrollTo(0,0)}
+  else if(t.dataset.e)openForm(items.find(x=>x.id==t.dataset.e));
+  else if(t.dataset.d){if(confirm("ลบรายการนี้?")){items=items.filter(x=>x.id!=t.dataset.d);save();go("list")}}
+  else if(t.dataset.item)location.hash="item-"+t.dataset.item;
+});
+load();render();
+</script>
+</body>
+</html>
