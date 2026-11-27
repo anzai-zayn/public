@@ -6,11 +6,12 @@
 <title>ทะเบียนฮาร์ดดิสก์และประกัน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-:root{--bg:#e9ece8;--card:#fbfcfa;--ink:#1c2326;--mute:#5d686b;--line:#c9d0cc;--ok:#1f7a4d;--okbg:#dcefe4;--warn:#a85a00;--warnbg:#fde9c8;--bad:#b3261e;--badbg:#f9dad7;--acc:#16505c;--accfg:#fff;--dat:#7a4fa3;
+:root{--bg:#e9ece8;--card:#fbfcfa;--ink:#1c2326;--mute:#5d686b;--line:#c9d0cc;--ok:#1f7a4d;--okbg:#dcefe4;--warn:#7d6200;--warnbg:#fdf3b8;--warnf:#e3b505;--hot:#b84a00;--hotbg:#fddcc4;--hotf:#f07a1a;--bad:#b3261e;--badbg:#f9dad7;--acc:#16505c;--accfg:#fff;--dat:#7a4fa3;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13191b;--card:#1b2427;--ink:#e6ecea;--mute:#98a6a8;--line:#2f3c40;--ok:#6fd3a0;--okbg:#17372a;--warn:#f2b45c;--warnbg:#3d2d10;--bad:#ff9a92;--badbg:#431d1a;--acc:#7cc7d6;--accfg:#0d1a1d;--dat:#c3a0ee}}
-:root[data-theme="dark"]{--bg:#13191b;--card:#1b2427;--ink:#e6ecea;--mute:#98a6a8;--line:#2f3c40;--ok:#6fd3a0;--okbg:#17372a;--warn:#f2b45c;--warnbg:#3d2d10;--bad:#ff9a92;--badbg:#431d1a;--acc:#7cc7d6;--accfg:#0d1a1d;--dat:#c3a0ee}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13191b;--card:#1b2427;--ink:#e6ecea;--mute:#98a6a8;--line:#2f3c40;--ok:#6fd3a0;--okbg:#17372a;--warn:#f2d65c;--warnbg:#3a3410;--warnf:#f2d65c;--hot:#ffa05c;--hotbg:#432712;--hotf:#ffa05c;--bad:#ff9a92;--badbg:#431d1a;--acc:#7cc7d6;--accfg:#0d1a1d;--dat:#c3a0ee}}
+:root[data-theme="dark"]{--bg:#13191b;--card:#1b2427;--ink:#e6ecea;--mute:#98a6a8;--line:#2f3c40;--ok:#6fd3a0;--okbg:#17372a;--warn:#f2d65c;--warnbg:#3a3410;--warnf:#f2d65c;--hot:#ffa05c;--hotbg:#432712;--hotf:#ffa05c;--bad:#ff9a92;--badbg:#431d1a;--acc:#7cc7d6;--accfg:#0d1a1d;--dat:#c3a0ee}
 html{color-scheme:light dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "IBM Plex Sans Thai",system-ui,sans-serif}
@@ -33,13 +34,13 @@ nav a.on{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
 .total{margin-bottom:10px}
 .item{background:var(--card);border:1px solid var(--line);border-left-width:6px;border-radius:6px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:6px 14px;cursor:pointer;margin-bottom:10px}
 .item:hover{border-color:var(--acc)}
-.item.ok{border-left-color:var(--ok)}.item.warn{border-left-color:var(--warn)}.item.bad{border-left-color:var(--bad)}
+.item.ok{border-left-color:var(--ok)}.item.warn{border-left-color:var(--warnf)}.item.hot{border-left-color:var(--hotf)}.item.bad{border-left-color:var(--bad)}
 .item h3{margin:0;font-size:1.05rem}
 .item h3 a{color:inherit;text-decoration:none}
 .meta{color:var(--mute);font-size:.9rem}
 .mini{font-size:.9rem;text-align:right;display:grid;gap:2px}
 .badge{display:inline-block;font-weight:700;font-size:.8rem;padding:2px 10px;border-radius:99px;white-space:nowrap}
-.badge.ok{background:var(--okbg);color:var(--ok)}.badge.warn{background:var(--warnbg);color:var(--warn)}.badge.bad{background:var(--badbg);color:var(--bad)}.badge.none{background:var(--line);color:var(--mute)}
+.badge.ok{background:var(--okbg);color:var(--ok)}.badge.warn{background:var(--warnbg);color:var(--warn)}.badge.hot{background:var(--hotbg);color:var(--hot)}.badge.bad{background:var(--badbg);color:var(--bad)}.badge.none{background:var(--line);color:var(--mute)}
 .tl{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 8px}
 .tl button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;border-radius:4px;font-size:.8rem;color:var(--mute)}
 .tl button:hover{background:var(--bg)}
@@ -59,7 +60,7 @@ input,select{font:inherit;color:var(--ink);background:var(--card);border:1px sol
 .back{display:inline-block;margin-bottom:8px;color:var(--acc);font-weight:500}
 .ws{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
 .w{background:var(--card);border:1px solid var(--line);border-top-width:5px;border-radius:6px;padding:12px 14px}
-.w.ok{border-top-color:var(--ok)}.w.warn{border-top-color:var(--warn)}.w.bad{border-top-color:var(--bad)}
+.w.ok{border-top-color:var(--ok)}.w.warn{border-top-color:var(--warnf)}.w.hot{border-top-color:var(--hotf)}.w.bad{border-top-color:var(--bad)}
 .w h4{margin:0 0 6px;display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:1rem}
 .big{font-size:1.4rem;font-weight:700}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0 0}
@@ -67,10 +68,102 @@ input,select{font:inherit;color:var(--ink);background:var(--card);border:1px sol
 .info{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
 .track{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:12px}
 .track i{display:block;height:100%;background:var(--ok)}
-.w.warn .track i{background:var(--warn)}.w.bad .track i{background:var(--bad)}
+.w.warn .track i{background:var(--warnf)}.w.hot .track i{background:var(--hotf)}.w.bad .track i{background:var(--bad)}
 .set{font-size:.9rem;color:var(--mute);display:flex;align-items:center;gap:6px}
 .set input{width:70px;padding:4px 8px}
 .att{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}.att figure{margin:0;display:grid;gap:4px;align-content:start}.att img{width:100%;height:120px;object-fit:cover;border-radius:6px;border:1px solid var(--line);cursor:pointer;background:var(--bg)}.att figcaption{font-size:.8rem;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ph{height:120px;display:grid;place-items:center;border:1px dashed var(--line);border-radius:6px;color:var(--mute);font-size:.85rem}.btn.sm{padding:3px 10px;font-size:.85rem}
+.d-head{margin:4px 0 16px}.d-head h2{margin:0;font-size:1.4rem}.d-head p{margin:2px 0 0;color:var(--mute);font-size:.92rem}
+.d-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.d-k{all:unset;box-sizing:border-box;cursor:pointer;display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-shadow:0 1px 3px rgba(20,35,40,.08)}
+.d-k:hover{border-color:var(--acc)}
+.d-k small{display:flex;align-items:center;gap:8px;color:var(--mute);font-size:.88rem}
+.d-k small i,.d-leg i{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.d-k b{display:block;font-size:2.3rem;font-weight:700;line-height:1.15;margin-top:6px;font-variant-numeric:tabular-nums}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.d-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;box-shadow:0 1px 3px rgba(20,35,40,.08)}
+.d-card h3{margin:0;font-size:1rem}
+.sub2{color:var(--mute);font-size:.85rem;margin:2px 0 14px}
+.d-stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--line);gap:2px}
+.d-stack button{all:unset;cursor:pointer;height:100%;min-width:6px}
+.d-leg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.d-leg button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center;padding:6px 8px;border-radius:6px}
+.d-leg button:hover{background:var(--bg)}
+.d-leg b{font-size:1.35rem;font-variant-numeric:tabular-nums;grid-column:2}
+.d-leg span{grid-column:2;color:var(--mute);font-size:.82rem}
+.d-leg i{grid-row:1/3;align-self:start;margin-top:9px}
+.d-row{display:flex;justify-content:space-between;gap:12px;padding:10px 6px;border-top:1px solid var(--line);cursor:pointer;border-radius:4px}
+.d-row:first-of-type{border-top:0}.d-row:hover{background:var(--bg)}
+.d-row a{color:var(--ink);font-weight:500;text-decoration:none}
+.d-row .r{text-align:right}
+.d-ok{padding:18px 8px;color:var(--ok);font-weight:500}
+.d-card .tl{background:none;border:0;padding:0}
+.d-foot{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;color:var(--mute);font-size:.9rem}
+.d-k:focus-visible,.d-card button:focus-visible,.tl button:focus-visible,.t:focus-visible{outline:3px solid var(--acc)!important;outline-offset:2px}
+@media(max-width:700px){.d-kpis{grid-template-columns:repeat(2,1fr)}.d-kpis .d-k:first-child{grid-column:1/-1}.d-grid{grid-template-columns:1fr}.d-leg{grid-template-columns:repeat(2,1fr)}}
+body{background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 13%,var(--bg)) 0,var(--bg) 460px) no-repeat,var(--bg)}
+.top{background:linear-gradient(120deg,#0f4c5c,#5a3d91);border-radius:14px;padding:14px 18px;box-shadow:0 4px 14px rgba(40,30,90,.25)}
+.top h1{color:#fff}
+nav a{color:#fff;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.38)}
+nav a:hover{background:rgba(255,255,255,.26)}
+nav a.on{background:#fff;color:#0f4c5c;border-color:#fff}
+.top .btn.p{background:#ffd23f;color:#2b2100;border-color:#ffd23f;font-weight:700}
+.top a:focus-visible,.top button:focus-visible{outline-color:#fff}
+.btn.p{background:linear-gradient(120deg,#0f4c5c,#5a3d91);color:#fff;border-color:transparent}
+.d-head h2{color:var(--acc)}
+.d-kpis .d-k:nth-child(1){--c:var(--acc);--ct:var(--acc)}
+.d-kpis .d-k:nth-child(2){--c:var(--ok);--ct:var(--ok)}
+.d-kpis .d-k:nth-child(3){--c:var(--warnf);--ct:var(--warn)}
+.d-kpis .d-k:nth-child(4){--c:var(--hotf);--ct:var(--hot)}
+.d-kpis .d-k:nth-child(5){--c:var(--bad);--ct:var(--bad)}
+.d-k{background:color-mix(in srgb,var(--c,var(--acc)) 16%,var(--card));border-color:color-mix(in srgb,var(--c,var(--acc)) 45%,var(--line));border-top:5px solid var(--c,var(--acc))}
+.d-k b{color:var(--ct,var(--ink))}
+.d-k:hover{border-color:var(--c,var(--acc));box-shadow:0 6px 16px rgba(20,35,40,.18)}
+.d-grid .d-card:first-child{border-top:5px solid var(--acc)}
+.d-grid .d-card:nth-child(2){border-top:5px solid var(--dat)}
+.d-card:has(.d-row),.d-card:has(.d-ok){border-top-color:var(--hotf)}
+.d-stack{height:16px;border-radius:8px}
+.d-leg button{background:var(--bg)}
+.d-leg button:nth-child(1) b{color:var(--ok)}.d-leg button:nth-child(2) b{color:var(--warn)}.d-leg button:nth-child(3) b{color:var(--hot)}.d-leg button:nth-child(4) b{color:var(--bad)}
+.d-ok{background:color-mix(in srgb,var(--ok) 13%,var(--card));border-radius:8px}
+.item.ok{background:color-mix(in srgb,var(--ok) 9%,var(--card))}.item.warn{background:color-mix(in srgb,var(--warnf) 13%,var(--card))}.item.hot{background:color-mix(in srgb,var(--hotf) 12%,var(--card))}.item.bad{background:color-mix(in srgb,var(--bad) 9%,var(--card))}
+.w.ok{background:color-mix(in srgb,var(--ok) 10%,var(--card))}.w.warn{background:color-mix(in srgb,var(--warnf) 14%,var(--card))}.w.hot{background:color-mix(in srgb,var(--hotf) 13%,var(--card))}.w.bad{background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.d-kpis .d-k:nth-child(1){--g:linear-gradient(135deg,#0f4c5c,#1d8197);--fg:#fff}
+.d-kpis .d-k:nth-child(2){--g:linear-gradient(135deg,#1f7a4d,#33a971);--fg:#fff}
+.d-kpis .d-k:nth-child(3){--g:linear-gradient(135deg,#f2c200,#ffe066);--fg:#2b2100}
+.d-kpis .d-k:nth-child(4){--g:linear-gradient(135deg,#d4530a,#f28c28);--fg:#fff}
+.d-kpis .d-k:nth-child(5){--g:linear-gradient(135deg,#a8201a,#dc4a40);--fg:#fff}
+.d-k{background:var(--g);color:var(--fg);border:0;box-shadow:0 4px 12px rgba(20,35,40,.22);transition:transform .12s,box-shadow .12s}
+.d-k small,.d-k b{color:var(--fg)}
+.d-k small i{background:var(--fg)!important;opacity:.9}
+.d-k:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(20,35,40,.3)}
+.d-grid .d-card:first-child{--cc:var(--acc)}
+.d-grid .d-card:nth-child(2){--cc:var(--dat)}
+.d-grid .d-card:has(.d-row),.d-grid .d-card:has(.d-ok){--cc:var(--hotf)}
+.d-grid .d-card:has(.tl){--cc:#3b6fd4}
+.d-grid .d-card{background:color-mix(in srgb,var(--cc,var(--acc)) 14%,var(--card));border:2px solid color-mix(in srgb,var(--cc,var(--acc)) 55%,var(--line));border-top:7px solid var(--cc,var(--acc));box-shadow:0 3px 10px rgba(20,35,40,.12)}
+.d-card h3{font-size:1.08rem;color:color-mix(in srgb,var(--cc,var(--acc)) 72%,var(--ink))}
+.d-grid .d-leg button{background:color-mix(in srgb,var(--card) 75%,transparent)}
+.d-grid .d-row{border-top-color:color-mix(in srgb,var(--cc,var(--acc)) 30%,var(--line))}
+.d-foot{background:color-mix(in srgb,var(--mute) 12%,var(--card));border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.br{display:inline-block;color:#fff;font-weight:700;font-size:.74rem;line-height:1.5;padding:1px 9px;border-radius:5px;margin-right:7px;vertical-align:1px;white-space:nowrap}
+.labels{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}
+.lab{box-sizing:border-box;background:#fff;color:#111;border:1.5px solid #111;border-radius:6px;overflow:hidden;display:flex;flex-direction:column;break-inside:avoid;page-break-inside:avoid}
+.lab.l{width:90mm;height:55mm;font-size:9pt}.lab.s{width:60mm;height:36mm;font-size:6.5pt}
+.lab-top{display:flex;justify-content:space-between;align-items:center;background:var(--bc);color:#fff;padding:1mm 2.5mm;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.lab-top b{font-size:1.25em;letter-spacing:.03em}
+.lab-main{display:flex;gap:2mm;padding:2mm 2.5mm;flex:1;min-height:0}
+.lab-t{flex:1;min-width:0;line-height:1.3;overflow:hidden}
+.lab-t .m{font-weight:700;font-size:1.1em}
+.lab-t div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lab .qr{flex:none;width:24mm;height:24mm}.lab.s .qr{width:15mm;height:15mm}
+.lab .qr img,.lab .qr canvas{width:100%!important;height:100%!important}
+#pa{display:none}
+@media print{@page{margin:8mm}body>*:not(#pa){display:none!important}body{background:#fff!important}#pa{display:block}#pa .labels{margin:0}}
+.thr{grid-column:1/-1;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.th{width:46px;height:46px;border-radius:6px;border:1px solid var(--line);background:var(--bg);overflow:hidden;display:inline-block}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.pchip{display:inline-block;padding:4px 10px;border-radius:5px;background:var(--badbg);color:var(--bad);font-weight:700;font-size:.75rem;border:1px solid var(--line)}
+.pdf{height:120px;display:grid;place-content:center;justify-items:center;gap:2px;border-radius:6px;border:1px solid var(--line);background:color-mix(in srgb,var(--bad) 9%,var(--card));color:var(--bad)}.pdf b{font-size:1.5rem;letter-spacing:.04em}.pdf span{font-size:.8rem;color:var(--mute)}
 dialog{border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:min(520px,94vw);padding:20px}
 #viewer{width:min(900px,96vw)}
 dialog::backdrop{background:rgba(0,0,0,.5)}
@@ -103,13 +196,21 @@ label input,label select{margin-top:4px;font-weight:400}
 <label>วันเริ่มประกันข้อมูล (ว่าง = วันที่ซื้อ)<input type="date" name="dstart"></label>
 <label>ระยะประกันข้อมูล (เดือน)<input type="number" name="dmonths" min="0" max="120" value="0"></label>
 <label class="full">รายละเอียดประกันข้อมูล (ถ้ามี)<input name="dnote" placeholder="เช่น Seagate Rescue Data Recovery"></label>
+<label>รหัสอุปกรณ์ (Asset Tag)<input name="tag" placeholder="เช่น HDD-001"></label>
+<label>สถานะการใช้งาน<select name="use"><option value="">-</option><option>ใช้งานอยู่</option><option>สำรอง</option><option>เก็บถาวร</option><option>เสีย / รอเคลม</option></select></label>
+<label class="full">ตำแหน่งที่เก็บ<input name="loc" placeholder="เช่น ตู้ A ชั้น 2 กล่อง 3"></label>
+<label>เจ้าของ / ผู้ดูแล<input name="owner"></label>
+<label>ติดตั้งในเครื่อง<input name="host" placeholder="เช่น NAS-01"></label>
+<label class="full">ข้อมูลที่เก็บอยู่<input name="content" placeholder="เช่น ไฟล์งานลูกค้าปี 2023"></label>
 <label class="full">ร้านค้า / หมายเหตุ<input name="note"></label>
-<label class="full">ใบกำกับภาษี / หลักฐานการซื้อ (รูปภาพ เลือกได้หลายไฟล์)<input type="file" id="ffile" accept="image/*" multiple></label>
+<label class="full">ใบกำกับภาษี / หลักฐานการซื้อ (รูปภาพหรือ PDF เลือกได้หลายไฟล์)<input type="file" id="ffile" accept="image/*,application/pdf" multiple></label>
 <div class="full att" id="fatt"></div>
 <div class="row"><button type="button" class="btn" id="cancel">ยกเลิก</button><button class="btn p">บันทึก</button></div>
 </form>
 </dialog>
-<dialog id="viewer"><div class="bar" style="justify-content:space-between"><b id="vname"></b><span><a class="btn" id="vdl">ดาวน์โหลด</a> <button class="btn" id="vclose">ปิด</button></span></div><img id="vimg" alt="" style="width:100%;height:auto;border-radius:4px"></dialog>
+<dialog id="lblDlg"><div class="bar" style="justify-content:space-between"><b>ตัวอย่างฉลาก</b><label class="set">ขนาด <select id="lsz" style="width:auto"><option value="l">ใหญ่ 90×55 มม.</option><option value="s">เล็ก 60×36 มม.</option></select></label></div><div id="lprev" class="labels"></div><div class="bar" style="margin-top:14px"><button class="btn p" id="lprint">พิมพ์</button><button class="btn" id="lclose">ปิด</button></div><p class="meta">แนะนำพิมพ์บนกระดาษสติกเกอร์หรือกระดาษ A4 แล้วตัด ในหน้าต่างพิมพ์ให้เลือกขนาด 100% (อย่าใช้ Fit to page)</p></dialog>
+<div id="pa"></div>
+<dialog id="viewer"><div class="bar" style="justify-content:space-between"><b id="vname"></b><span><button class="btn" id="vdl">ดาวน์โหลด</button> <button class="btn" id="vclose">ปิด</button></span></div><img id="vimg" alt="" style="width:100%;height:auto;border-radius:4px"></dialog>
 <input type="file" id="file" accept=".json" hidden>
 
 <script>
@@ -136,10 +237,11 @@ function calc(it,m,s){
   const total=Math.max(1,Math.round((e-parse(s||it.buy))/864e5));
   let st="ok",label="อยู่ในประกัน";
   if(left<0){st="bad";label="หมดประกันแล้ว"}
+  else if(left<=Math.min(30,alertDays)){st="hot";label="ใกล้หมดมาก"}
   else if(left<=alertDays){st="warn";label="ใกล้หมดประกัน"}
   return{e,left,st,label,m,s:s||it.buy,pct:Math.min(100,Math.max(0,Math.round(left/total*100)))}
 }
-const RANK={ok:0,warn:1,bad:2};
+const RANK={ok:0,warn:1,hot:2,bad:3};
 function info(it){
   const h=calc(it,it.months,it.hstart),d=calc(it,it.dmonths,it.dstart),l=[h,d].filter(Boolean);
   if(!l.length)return{h,d,st:"ok",left:99999};
@@ -157,7 +259,17 @@ function leftText(i){
   return`เหลืออีก ${i.left} วัน`
 }
 const bd=w=>w?`<span class="badge ${w.st}">${w.label}</span>`:`<span class="badge none">ไม่มี</span>`;
-const KN={h:"ประกันฮาร์ดแวร์",d:"ประกันข้อมูล"},SN={ok:"อยู่ในประกัน",warn:"ใกล้หมดประกัน",bad:"หมดประกันแล้ว"};
+const KN={h:"ประกันฮาร์ดแวร์",d:"ประกันข้อมูล"},SN={ok:"อยู่ในประกัน",warn:"ใกล้หมดประกัน",hot:"ใกล้หมดมาก",bad:"หมดประกันแล้ว"};
+
+/* ---------- Brand colors ---------- */
+const BR=[["WD",/\b(wd|western\s*digital)\b/i,"#1f5fc4"],["Seagate",/seagate|barracuda|ironwolf|skyhawk|firecuda/i,"#3a7d12"],["Toshiba",/toshiba/i,"#b0124f"],["Samsung",/samsung/i,"#3436b8"],["Crucial",/crucial|micron/i,"#0b7f8a"],["Kingston",/kingston/i,"#a8452c"],["SanDisk",/sandisk/i,"#c2307f"],["HGST",/hgst|hitachi/i,"#6e4399"],["Intel",/\bintel\b/i,"#1478b4"],["ADATA",/adata/i,"#7a4e22"],["Transcend",/transcend/i,"#66721a"],["Lexar",/lexar/i,"#4a5f6e"]];
+function brand(it){
+  const m=String(it.model||"");
+  for(const[n,r,c]of BR)if(r.test(m))return{n,c};
+  const w=m.trim().split(/\s+/)[0]||"อื่นๆ";let h=0;for(const ch of w)h=(h*31+ch.charCodeAt(0))%360;
+  return{n:w,c:`hsl(${h} 50% 36%)`}
+}
+const bc=it=>{const b=brand(it);return`<span class="br" style="background:${b.c}">${esc(b.n)}</span>`};
 
 /* ---------- Attachments ---------- */
 let fl=[],dbp;
@@ -165,18 +277,53 @@ function db(){return dbp||(dbp=new Promise((res,rej)=>{try{const r=indexedDB.ope
 async function idb(mode,fn){const d=await db();return new Promise((res,rej)=>{const t=d.transaction("f",mode),r=fn(t.objectStore("f"));t.oncomplete=()=>res(r&&r.result);t.onerror=()=>rej(t.error)})}
 const putF=(id,v)=>idb("readwrite",s=>s.put(v,id)),getF=id=>idb("readonly",s=>s.get(id)),delF=id=>idb("readwrite",s=>s.delete(id));
 function shrink(file){return new Promise((res,rej)=>{const img=new Image(),u=URL.createObjectURL(file);img.onload=()=>{const sc=Math.min(1,1800/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.8))};img.onerror=()=>{URL.revokeObjectURL(u);rej()};img.src=u})}
-function showImg(src,name){$("#vimg").src=src;$("#vimg").alt=name;$("#vname").textContent=name;const a=$("#vdl");a.href=src;a.download=name.replace(/\.[^.]*$/,"")+".jpg";$("#viewer").showModal()}
+function showImg(src,name){$("#vimg").src=src;$("#vimg").alt=name;$("#vname").textContent=name;vcur={src,name};$("#viewer").showModal()}
 $("#vclose").onclick=()=>$("#viewer").close();
+let vcur=null;
+const readURL=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});
+function dataBlob(u){const b=atob(u.split(",")[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return new Blob([a])}
+async function saveFile(name,url){
+  const ext=String(url).startsWith("data:application/pdf")?"pdf":"jpg",fn=name.replace(/\.[^.]*$/,"")+"."+ext;
+  try{
+    const dl=window.claude?await window.claude.use("downloads"):null,blob=dataBlob(url);
+    if(dl){await dl.save({filename:fn,data:blob});return}
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fn;a.click()
+  }catch(e){if(!e||e.code!=="declined")alert("บันทึกไฟล์ไม่สำเร็จ")}
+}
+$("#vdl").onclick=()=>{if(vcur)saveFile(vcur.name,vcur.src)};
+const pdfTile=f=>`<div class="pdf"><b>PDF</b><span>${f.size?(f.size/1048576).toFixed(1)+" MB":""}</span></div>`;
+function thr(it){const fs=it.files||[];if(!fs.length)return"";return`<div class="thr">${fs.slice(0,5).map(f=>f.t==="pdf"?`<span class="pchip" title="${esc(f.name)}">PDF</span>`:`<span class="th" data-fid="${f.id}"></span>`).join("")}${fs.length>5?`<span class="meta">+${fs.length-5}</span>`:""}</div>`}
+async function loadThumbs(){for(const el of document.querySelectorAll("[data-fid]")){try{const d=await getF(el.dataset.fid);if(d&&el.isConnected)el.innerHTML=`<img src="${d}" alt="">`}catch(e){}}}
 function renderFatt(){
   const b=$("#fatt");
-  b.innerHTML=fl.map((f,n)=>`<figure>${f.data?`<img src="${f.data}" alt="${esc(f.name)}">`:`<div class="ph">กำลังโหลด…</div>`}<figcaption>${esc(f.name)}</figcaption><button type="button" class="btn sm d" data-rm="${n}">ลบไฟล์</button></figure>`).join("");
+  b.innerHTML=fl.map((f,n)=>`<figure>${f.t==="pdf"?pdfTile(f):f.data?`<img src="${f.data}" alt="${esc(f.name)}">`:`<div class="ph">กำลังโหลด…</div>`}<figcaption>${esc(f.name)}</figcaption><button type="button" class="btn sm d" data-rm="${n}">ลบไฟล์</button></figure>`).join("");
   b.querySelectorAll("[data-rm]").forEach(x=>x.onclick=()=>{fl.splice(Number(x.dataset.rm),1);renderFatt()});
 }
 $("#ffile").onchange=async e=>{
-  for(const file of e.target.files){try{fl.push({id:"f"+Date.now()+Math.random().toString(36).slice(2,6),name:file.name,data:await shrink(file),n:true})}catch(x){alert("อ่านไฟล์ "+file.name+" ไม่ได้ (รองรับเฉพาะไฟล์รูปภาพ)")}}
+  for(const file of e.target.files){
+    const id="f"+Date.now()+Math.random().toString(36).slice(2,6);
+    try{
+      if(file.type==="application/pdf"||/\.pdf$/i.test(file.name)){
+        if(file.size>10*1048576){alert(file.name+" ใหญ่เกิน 10 MB");continue}
+        fl.push({id,name:file.name,t:"pdf",size:file.size,data:(await readURL(file)).replace(/^data:[^;,]*/,"data:application/pdf"),n:true})
+      }else fl.push({id,name:file.name,data:await shrink(file),n:true})
+    }catch(x){alert("อ่านไฟล์ "+file.name+" ไม่ได้ (รองรับรูปภาพและ PDF)")}
+  }
   e.target.value="";renderFatt()
 };
 async function loadAtt(it){
+  const box=$("#datt"),fs=it.files||[];if(!box||!fs.length)return;
+  box.innerHTML=fs.map((f,n)=>f.t==="pdf"?`<figure>${pdfTile(f)}<figcaption>${esc(f.name)}</figcaption><button class="btn sm" data-pdf="${n}">ดาวน์โหลด PDF</button></figure>`:`<figure><div class="ph" data-n="${n}">กำลังโหลด…</div><figcaption>${esc(f.name)}</figcaption></figure>`).join("");
+  box.querySelectorAll("[data-pdf]").forEach(b=>b.onclick=async()=>{const f=fs[b.dataset.pdf];try{const d=await getF(f.id);if(!d)throw 0;saveFile(f.name,d)}catch(e){alert("ไม่พบไฟล์")}});
+  for(const[n,f]of fs.entries()){
+    if(f.t==="pdf")continue;
+    let d=null;try{d=await getF(f.id)}catch(e){}
+    const ph=box.querySelector(`[data-n="${n}"]`);if(!ph)return;
+    if(d){ph.outerHTML=`<img src="${d}" alt="${esc(f.name)}" tabindex="0" data-n="${n}">`;const im=box.querySelector(`img[data-n="${n}"]`);im.onclick=()=>showImg(d,f.name);im.onkeydown=e=>{if(e.key==="Enter")showImg(d,f.name)}}
+    else ph.textContent="ไม่พบไฟล์"
+  }
+}
+async function loadAttOld(it){
   const box=$("#datt");if(!box||!(it.files||[]).length)return;
   box.innerHTML=it.files.map((f,n)=>`<figure><div class="ph" data-n="${n}">กำลังโหลด…</div><figcaption>${esc(f.name)}</figcaption></figure>`).join("");
   for(const[n,f]of it.files.entries()){
@@ -187,9 +334,52 @@ async function loadAtt(it){
   }
 }
 
+/* ---------- Labels ---------- */
+let lastRows=[],lblItems=[];
+function nextTag(){let n=0;items.forEach(x=>{const m=/(\d+)\s*$/.exec(x.tag||"");if(m)n=Math.max(n,Number(m[1]))});return"HDD-"+String(n+1).padStart(3,"0")}
+function labHtml(it,sz){
+  const b=brand(it),i=info(it),r=w=>w?fmt(w.e):"-";
+  return`<div class="lab ${sz}" style="--bc:${b.c}"><div class="lab-top"><b>${esc(it.tag||"HDD")}</b><span>${esc(b.n)}</span></div><div class="lab-main"><div class="lab-t"><div class="m">${esc(it.model)}</div><div>${esc(it.type)}${it.size?" · "+esc(it.size):""}${it.use?" · "+esc(it.use):""}</div>${it.sn?`<div>S/N: ${esc(it.sn)}</div>`:""}${it.loc?`<div>ที่เก็บ: ${esc(it.loc)}</div>`:""}${it.owner?`<div>ผู้ดูแล: ${esc(it.owner)}</div>`:""}${it.content?`<div>ข้อมูล: ${esc(it.content)}</div>`:""}<div>ซื้อ: ${fmt(parse(it.buy))}</div><div>ประกันตัวเครื่องถึง: ${r(i.h)}</div><div>ประกันข้อมูลถึง: ${r(i.d)}</div></div><div class="qr" data-q="${esc([it.tag,it.model,it.sn].filter(Boolean).join(" | "))}"></div></div></div>`
+}
+function fillQR(root){root.querySelectorAll(".qr").forEach(el=>{el.innerHTML="";try{new QRCode(el,{text:el.dataset.q,width:160,height:160,correctLevel:QRCode.CorrectLevel.M})}catch(e){el.remove()}})}
+function drawLabels(){const p=$("#lprev");p.innerHTML=lblItems.map(it=>labHtml(it,$("#lsz").value)).join("");fillQR(p)}
+function showLabels(list){if(!list.length){alert("ไม่มีรายการให้พิมพ์ฉลาก");return}lblItems=list;drawLabels();$("#lblDlg").showModal()}
+$("#lsz").onchange=drawLabels;
+$("#lclose").onclick=()=>$("#lblDlg").close();
+$("#lprint").onclick=()=>{const pa=$("#pa");pa.innerHTML='<div class="labels">'+lblItems.map(it=>labHtml(it,$("#lsz").value)).join("")+"</div>";fillQR(pa);setTimeout(()=>{try{window.print()}catch(e){alert("เบราว์เซอร์ไม่อนุญาตให้พิมพ์จากหน้านี้")}},300)};
+
 /* ---------- Dashboard ---------- */
 function tile(k,st,n,label){return`<button class="t ${st||""}" data-go="list" data-k="${k}" data-st="${st||""}"><b>${n}</b><span>${label}</span></button>`}
 function dash(){
+  const A=all(),cnt=(k,st)=>A.filter(x=>x.i[k]&&x.i[k].st===st).length,kc=st=>A.filter(x=>match(x,{k:"",st,month:""})).length;
+  const dt=new Date().toLocaleDateString("th-TH",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  const kpi=(st,label,n,col)=>`<button class="d-k" data-go="list" data-k="" data-st="${st}"><small><i style="background:${col}"></i>${label}</small><b>${n}</b></button>`;
+  const panel=(k,t)=>{
+    const o=cnt(k,"ok"),w=cnt(k,"warn"),h=cnt(k,"hot"),b=cnt(k,"bad"),n=A.length-A.filter(x=>x.i[k]).length;
+    const seg=(st,v,col,l)=>v?`<button data-go="list" data-k="${k}" data-st="${st}" style="flex:${v};background:${col}" aria-label="${l} ${v}"></button>`:"";
+    const lg=(st,v,col,l)=>`<button data-go="list" data-k="${k}" data-st="${st}"><i style="background:${col}"></i><b>${v}</b><span>${l}</span></button>`;
+    return`<section class="d-card"><h3>${t}</h3><p class="sub2">${o+w+h+b} จาก ${A.length} รายการมีประกันส่วนนี้${n?` · ไม่ได้ระบุ ${n}`:""}</p><div class="d-stack">${seg("ok",o,"var(--ok)","อยู่ในประกัน")}${seg("warn",w,"var(--warnf)","เริ่มใกล้หมด")}${seg("hot",h,"var(--hotf)","ใกล้หมดมาก")}${seg("bad",b,"var(--bad)","หมดแล้ว")}</div><div class="d-leg">${lg("ok",o,"var(--ok)","อยู่ในประกัน")}${lg("warn",w,"var(--warnf)","เริ่มใกล้หมด")}${lg("hot",h,"var(--hotf)","ใกล้หมดมาก")}${lg("bad",b,"var(--bad)","หมดแล้ว")}</div></section>`
+  };
+  const ev=[];A.forEach(({it,i})=>["h","d"].forEach(k=>{if(i[k]&&i[k].st!=="ok")ev.push({it,k,w:i[k]})}));
+  ev.sort((a,b)=>{const x=a.w.st==="bad",y=b.w.st==="bad";return x!==y?(x?1:-1):x?b.w.left-a.w.left:a.w.left-b.w.left});
+  const att=ev.slice(0,6).map(({it,k,w})=>`<div class="d-row" data-item="${it.id}"><div>${bc(it)}<a href="#item-${it.id}">${esc(it.model)}</a><div class="meta">${KN[k]} · หมด ${fmt(w.e)}</div></div><div class="r">${bd(w)}<div class="meta">${leftText(w)}</div></div></div>`).join("")||`<div class="d-ok">ทุกอย่างปกติ ไม่มีประกันที่ใกล้หมดหรือหมดแล้ว</div>`;
+  const b=today(),ms=[...Array(12)].map((_,n)=>{const d=new Date(b.getFullYear(),b.getMonth()+n,1);return{key:mkey(d),lab:d.toLocaleDateString("th-TH",{month:"short"}),h:0,d:0}});
+  A.forEach(({i})=>["h","d"].forEach(k=>{const w=i[k];if(!w||w.left<0)return;const m=ms.find(x=>x.key===mkey(w.e));if(m)m[k]++}));
+  const mx=Math.max(1,...ms.map(m=>m.h+m.d));
+  const tl=ms.map(m=>`<button data-go="list" data-k="" data-st="" data-month="${m.key}" aria-label="${m.lab}: ฮาร์ดแวร์ ${m.h} ข้อมูล ${m.d}"><span>${m.h+m.d||""}</span><div class="col"><i class="d" style="height:${m.d/mx*80}px"></i><i class="h" style="height:${m.h/mx*80}px"></i></div>${m.lab}</button>`).join("");
+  return`
+  <div class="d-head"><h2>ภาพรวมประกัน</h2><p>${dt}</p></div>
+  <div class="d-kpis">${kpi("","ฮาร์ดดิสก์ทั้งหมด",A.length,"var(--acc)")}${kpi("ok","อยู่ในประกัน",kc("ok"),"var(--ok)")}${kpi("warn","เริ่มใกล้หมด",kc("warn"),"var(--warnf)")}${kpi("hot","ใกล้หมดมาก",kc("hot"),"var(--hotf)")}${kpi("bad","หมดประกันแล้ว",kc("bad"),"var(--bad)")}</div>
+  <p class="lg" style="margin:10px 2px 0"><i style="background:var(--ok)"></i>เขียว = อยู่ในประกัน<i style="background:var(--warnf)"></i>เหลือง = เหลือไม่เกิน ${alertDays} วัน<i style="background:var(--hotf)"></i>ส้ม = เหลือไม่เกิน ${Math.min(30,alertDays)} วัน<i style="background:var(--bad)"></i>แดง = หมดแล้ว</p>
+  <div class="d-grid">${panel("h","ประกันฮาร์ดแวร์")}${panel("d","ประกันข้อมูล")}</div>
+  <div class="d-grid">
+    <section class="d-card"><h3>ควรดูแลก่อน</h3><p class="sub2">${ev.length>6?"แสดง 6 จาก "+ev.length+" รายการ · ":""}กดเพื่อดูรายละเอียด</p>${att}</section>
+    <section class="d-card"><h3>กำหนดหมดประกันใน 12 เดือนข้างหน้า</h3><p class="sub2">กดที่เดือนเพื่อดูรายการ</p><div class="tl">${tl}</div><div class="lg"><i style="background:var(--acc)"></i>ฮาร์ดแวร์<i style="background:var(--dat)"></i>ข้อมูล</div></section>
+  </div>
+  <div class="d-foot"><label class="set">เตือนสีเหลืองเมื่อเหลือไม่เกิน <input type="number" id="days" min="1" max="365" value="${alertDays}"> วัน</label>
+  <span><button class="btn sm" id="exp">สำรองข้อมูล</button> <button class="btn sm" id="imp">นำเข้า</button></span></div>`
+}
+function dashOld(){
   const A=all(),cnt=(k,st)=>A.filter(x=>x.i[k]&&x.i[k].st===st).length;
   const ev=[];A.forEach(({it,i})=>["h","d"].forEach(k=>{if(i[k]&&i[k].st!=="ok")ev.push({it,k,w:i[k]})}));
   ev.sort((a,b)=>(a.w.st===b.w.st)?(a.w.st==="warn"?a.w.left-b.w.left:b.w.left-a.w.left):(a.w.st==="warn"?-1:1));
@@ -222,9 +412,9 @@ function match({i},f){
 }
 function res(){
   const s=q.trim().toLowerCase();
-  const rows=all().filter(x=>match(x,flt)&&(!s||[x.it.model,x.it.sn,x.it.note,x.it.type,x.it.dnote].join(" ").toLowerCase().includes(s))).sort((a,b)=>a.i.left-b.i.left);
-  return rows.length?rows.map(({it,i})=>`<article class="item ${i.st}" data-item="${it.id}"><div><h3><a href="#item-${it.id}">${esc(it.model)}</a></h3><div class="meta">${esc(it.type)}${it.size?" · "+esc(it.size):""}${it.sn?" · S/N "+esc(it.sn):""}</div><div class="meta">ซื้อ ${fmt(parse(it.buy))}${it.note?" · "+esc(it.note):""}${(it.files||[]).length?" · แนบหลักฐาน "+it.files.length+" ไฟล์":""}</div></div>
-  <div class="mini"><span>ฮาร์ดแวร์ ${bd(i.h)} ${i.h?"หมด "+fmt(i.h.e):""}</span><span>ข้อมูล ${bd(i.d)} ${i.d?"หมด "+fmt(i.d.e):""}</span></div></article>`).join(""):`<div class="empty">ไม่พบรายการ</div>`
+  const rows=all().filter(x=>match(x,flt)&&(!s||[x.it.model,x.it.sn,x.it.note,x.it.type,x.it.dnote,x.it.tag,x.it.loc,x.it.owner,x.it.host,x.it.content].join(" ").toLowerCase().includes(s))).sort((a,b)=>a.i.left-b.i.left);
+  lastRows=rows.map(x=>x.it);return rows.length?rows.map(({it,i})=>`<article class="item ${i.st}" data-item="${it.id}"><div><h3>${bc(it)}<a href="#item-${it.id}">${esc(it.model)}</a></h3><div class="meta">${it.tag?`<b>${esc(it.tag)}</b> · `:""}${esc(it.type)}${it.size?" · "+esc(it.size):""}${it.sn?" · S/N "+esc(it.sn):""}${it.loc?" · ที่เก็บ: "+esc(it.loc):""}</div><div class="meta">ซื้อ ${fmt(parse(it.buy))}${it.note?" · "+esc(it.note):""}${(it.files||[]).length?" · แนบหลักฐาน "+it.files.length+" ไฟล์":""}</div></div>
+  <div class="mini"><span>ฮาร์ดแวร์ ${bd(i.h)} ${i.h?"หมด "+fmt(i.h.e):""}</span><span>ข้อมูล ${bd(i.d)} ${i.d?"หมด "+fmt(i.d.e):""}</span></div>${thr(it)}</article>`).join(""):`<div class="empty">ไม่พบรายการ</div>`
 }
 function listView(){
   const on=s=>flt.st===s&&!flt.month?"on":"";
@@ -233,10 +423,12 @@ function listView(){
   return`<h2>รายการทั้งหมด</h2>
   <div class="bar"><input type="search" id="q" value="${esc(q)}" placeholder="ค้นหารุ่น ซีเรียล หรือร้านค้า" aria-label="ค้นหา"></div>
   <div class="bar"><button class="btn ${!flt.st&&!flt.month?"on":""}" data-go="list" data-k="${flt.k||""}" data-st="">ทั้งหมด</button>
-  <button class="btn ${on("warn")}" data-go="list" data-k="${flt.k||""}" data-st="warn">ใกล้หมด</button>
+  <button class="btn ${on("warn")}" data-go="list" data-k="${flt.k||""}" data-st="warn">เริ่มใกล้หมด</button>
+  <button class="btn ${on("hot")}" data-go="list" data-k="${flt.k||""}" data-st="hot">ใกล้หมดมาก</button>
   <button class="btn ${on("bad")}" data-go="list" data-k="${flt.k||""}" data-st="bad">หมดแล้ว</button>
   <button class="btn ${on("ok")}" data-go="list" data-k="${flt.k||""}" data-st="ok">อยู่ในประกัน</button></div>
   ${parts.length?`<p class="meta">กำลังกรอง: ${parts.join(" · ")} · <a href="#list" data-go="list" data-k="" data-st="">ล้างตัวกรอง</a></p>`:""}
+  <div class="bar"><button class="btn" data-lbl="all">พิมพ์ฉลากรายการที่แสดง</button></div>
   <div id="res">${res()}</div>`
 }
 
@@ -250,11 +442,12 @@ function wfull(t,w,n){
 function detail(it){
   const i=info(it);
   return`<a class="back" href="#list">‹ รายการทั้งหมด</a>
-  <h2>${esc(it.model)}</h2>
-  <div class="info"><dl class="kv"><dt>ประเภท</dt><dd>${esc(it.type)}</dd><dt>ความจุ</dt><dd>${esc(it.size)||"-"}</dd><dt>ซีเรียล (S/N)</dt><dd>${esc(it.sn)||"-"}</dd><dt>วันที่ซื้อ</dt><dd>${fmt(parse(it.buy))}</dd><dt>ร้านค้า / หมายเหตุ</dt><dd>${esc(it.note)||"-"}</dd></dl></div>
+  <h2>${bc(it)}${esc(it.model)}</h2>
+  <div class="info" style="border-left:6px solid ${brand(it).c}"><dl class="kv"><dt>ประเภท</dt><dd>${esc(it.type)}</dd><dt>ความจุ</dt><dd>${esc(it.size)||"-"}</dd><dt>ซีเรียล (S/N)</dt><dd>${esc(it.sn)||"-"}</dd><dt>วันที่ซื้อ</dt><dd>${fmt(parse(it.buy))}</dd><dt>ร้านค้า / หมายเหตุ</dt><dd>${esc(it.note)||"-"}</dd></dl></div>
+  <div class="sec">ข้อมูลการจัดเก็บ (สำหรับทำฉลาก)</div><div class="info"><dl class="kv"><dt>รหัสอุปกรณ์</dt><dd>${esc(it.tag)||"-"}</dd><dt>สถานะการใช้งาน</dt><dd>${esc(it.use)||"-"}</dd><dt>ตำแหน่งที่เก็บ</dt><dd>${esc(it.loc)||"-"}</dd><dt>เจ้าของ / ผู้ดูแล</dt><dd>${esc(it.owner)||"-"}</dd><dt>ติดตั้งในเครื่อง</dt><dd>${esc(it.host)||"-"}</dd><dt>ข้อมูลที่เก็บอยู่</dt><dd>${esc(it.content)||"-"}</dd></dl></div>
   <div class="ws">${wfull("ประกันฮาร์ดแวร์ (ตัวเครื่อง)",i.h)}${wfull("ประกันข้อมูล",i.d,it.dnote)}</div>
   <div class="sec">ใบกำกับภาษี / หลักฐานการซื้อ<small>${(it.files||[]).length} ไฟล์ · กดที่รูปเพื่อดูขนาดเต็ม</small></div><div class="att" id="datt">${(it.files||[]).length?"":'<div class="meta">ยังไม่มีไฟล์ กด “แก้ไข” เพื่อแนบรูป</div>'}</div>
-  <div class="bar" style="margin-top:16px"><button class="btn p" data-e="${it.id}">แก้ไข</button><button class="btn d" data-d="${it.id}">ลบรายการนี้</button></div>`
+  <div class="bar" style="margin-top:16px"><button class="btn p" data-e="${it.id}">แก้ไข</button><button class="btn" data-lbl="${it.id}">พิมพ์ฉลาก</button><button class="btn d" data-d="${it.id}">ลบรายการนี้</button></div>`
 }
 
 /* ---------- Router ---------- */
@@ -262,7 +455,7 @@ function render(){
   const h=location.hash.slice(1),app=$("#app");
   document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.n===(h.startsWith("item-")?"list":h||"dashboard")));
   if(h.startsWith("item-")){const it=items.find(x=>x.id==h.slice(5));app.innerHTML=it?detail(it):`<a class="back" href="#list">‹ รายการทั้งหมด</a><div class="empty">ไม่พบรายการนี้</div>`;if(it)loadAtt(it)}
-  else if(h==="list"){app.innerHTML=listView();$("#q").oninput=e=>{q=e.target.value;$("#res").innerHTML=res()}}
+  else if(h==="list"){app.innerHTML=listView();loadThumbs();$("#q").oninput=e=>{q=e.target.value;$("#res").innerHTML=res();loadThumbs()}}
   else{app.innerHTML=dash();bindTools()}
 }
 function go(h){if(location.hash.slice(1)===h)render();else location.hash=h}
@@ -285,8 +478,8 @@ $("#file").onchange=e=>{
 /* ---------- Form & clicks ---------- */
 function openForm(it){
   editId=it?it.id:null;const f=$("#f");f.reset();
-  if(it)for(const k of["model","type","size","sn","buy","hstart","months","dstart","dmonths","dnote","note"])f.elements[k].value=it[k]??"";
-  else f.elements.buy.value=iso(new Date());
+  if(it)for(const k of["model","type","size","sn","buy","hstart","months","dstart","dmonths","dnote","tag","use","loc","owner","host","content","note"])f.elements[k].value=it[k]??"";
+  else{f.elements.buy.value=iso(new Date());f.elements.tag.value=nextTag()}
   fl=((it&&it.files)||[]).map(x=>({...x,data:null}));renderFatt();
   fl.forEach(async x=>{try{x.data=await getF(x.id)}catch(e){}renderFatt()});
   $("#dlg").showModal();
@@ -297,14 +490,15 @@ $("#f").onsubmit=async e=>{
   e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
   const old=editId?((items.find(x=>x.id===editId)||{}).files||[]):[];
   try{for(const f of fl)if(f.n)await putF(f.id,f.data);for(const o of old)if(!fl.some(f=>f.id===o.id))await delF(o.id)}catch(x){alert("บันทึกรูปไม่สำเร็จ เบราว์เซอร์อาจไม่อนุญาตให้เก็บไฟล์")}
-  d.files=fl.map(({id,name})=>({id,name}));
+  d.files=fl.map(({id,name,t,size})=>({id,name,t,size}));
   if(editId){items=items.map(x=>x.id===editId?{...x,...d}:x)}else items.push({id:Date.now(),...d});
   save();$("#dlg").close();render();
 };
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-go],[data-item],[data-e],[data-d]");if(!t)return;
+  const t=e.target.closest("[data-go],[data-item],[data-e],[data-d],[data-lbl]");if(!t)return;
   if(e.target.closest("a")&&!t.dataset.go)return;
   if(t.dataset.go){e.preventDefault();flt={k:t.dataset.k||"",st:t.dataset.st||"",month:t.dataset.month||""};q="";go("list");scrollTo(0,0)}
+  else if(t.dataset.lbl)showLabels(t.dataset.lbl==="all"?lastRows:items.filter(x=>x.id==t.dataset.lbl));
   else if(t.dataset.e)openForm(items.find(x=>x.id==t.dataset.e));
   else if(t.dataset.d){if(confirm("ลบรายการนี้?")){const di=items.find(x=>x.id==t.dataset.d);((di&&di.files)||[]).forEach(f=>delF(f.id).catch(()=>{}));items=items.filter(x=>x.id!=t.dataset.d);save();go("list")}}
   else if(t.dataset.item)location.hash="item-"+t.dataset.item;
